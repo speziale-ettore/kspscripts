@@ -10,8 +10,8 @@ function run_mission {
   local runmode is "launch".
 
   function _load_runmode {
-    if exists("runmode.json") {
-      local json is readjson("runmode.json").
+    if exists(core:volume + ":/runmode.json") {
+      local json is readjson(core:volume + ":/runmode.json").
       if json:haskey("value") {
         set runmode to json["value"].
       }
@@ -19,7 +19,7 @@ function run_mission {
   }
   function _store_runmode {
     local json is lexicon("value", runmode).
-    writejson(json, "runmode.json").
+    writejson(json, core:volume + ":/runmode.json").
   }
 
   function _add_runmode {
@@ -63,6 +63,9 @@ function run_mission {
 
   function _terminate {
     set done to true.
+    if exists(core:volume + ":/runmode.json") {
+      deletepath(core:volume + ":/runmode.json").
+    }
   }
 
   local mission is lexicon().
