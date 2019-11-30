@@ -2,7 +2,7 @@
 // mfd: multi functional display.
 //
 
-include("utils/modulo.ks").
+include("math/modulo.ks").
 
 //
 // mfd pages implementation.

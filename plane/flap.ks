@@ -2,7 +2,7 @@
 // flap.ks: automatic flap controller.
 //
 
-include("utils/clamp.ks").
+include("math/clamp.ks").
 
 function make_flap_controller {
   parameter ext_speed.
