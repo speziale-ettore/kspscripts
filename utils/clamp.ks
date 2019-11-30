@@ -1,5 +1,5 @@
 //
-// clamp.ks: clamp numbers..
+// clamp.ks: clamp numbers.
 //
 
 function clamp {
