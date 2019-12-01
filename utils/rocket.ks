@@ -3,6 +3,7 @@
 //
 
 include("utils/ship.ks").
+include("utils/navigation.ks").
 
 function make_rocket_ascending_steering {
   parameter inclination.
@@ -10,7 +11,8 @@ function make_rocket_ascending_steering {
 
   local pitch_a is 0.
   local pitch_b is 0.
-  local pitch_direction is heading(inclination, 100).
+  local pitch_direction is heading(inclination, 80).
+  local pitch_heading is dir_heading(pitch_direction).
 
   local _prev_state is 0.
   local _cur_state is 0.
@@ -31,7 +33,7 @@ function make_rocket_ascending_steering {
         set _cur_state to 2.
       }
       set _prev_state to 1.
-      return pitch_direction.
+      return lookdirup(pitch_direction:forevector, body:position).
     } if _cur_state = 2 {
       if _prev_state = 2 and eta:apoapsis >= 90 {
         notify_info("gravity turn done").
@@ -47,12 +49,12 @@ function make_rocket_ascending_steering {
         set _cur_state to 4.
       }
       set _prev_state to 3.
-      return lookdirup(heading(inclination, pitch_a * ship:altitude^2 +
-                                            pitch_b):forevector,
+      return lookdirup(heading(pitch_heading,
+                               pitch_a * ship:altitude^2 + pitch_b):forevector,
                        body:position).
     } else {
       set _prev_state to 4.
-      return lookdirup(heading(inclination, 0):forevector, body:position).
+      return lookdirup(heading(pitch_heading, 0):forevector, body:position).
     }
   }
 

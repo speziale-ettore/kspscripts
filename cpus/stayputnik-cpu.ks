@@ -21,6 +21,7 @@ function _launch {
 
   notify_info("detach").
   stage.
+  wait 4.
 
   local str is make_capsule_suborbital_steering().
   lock steering to str().
@@ -47,7 +48,7 @@ function _apogee {
 function _chute {
   parameter mission.
 
-  if (ship:sensors:pres * constant:kpatoatm) < (chute_pres - 0.1) {
+  if (ship:sensors:pres * constant:kpatoatm) <= chute_pres {
     return.
   }
   notify_info("chutes on").

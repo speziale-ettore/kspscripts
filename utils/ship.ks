@@ -22,6 +22,11 @@ function ship_family {
   return ship:name:substring(0, n).
 }
 
+function ship_haspart {
+  parameter tag.
+  return not ship:partstagged(tag):empty.
+}
+
 function ship_science {
   local science is list().
 
