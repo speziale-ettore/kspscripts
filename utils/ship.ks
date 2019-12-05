@@ -17,7 +17,7 @@ function ship_roll {
 function ship_family {
   local n is ship:name:indexof(" ").
   if n = -1 {
-    set n to ship:length.
+    set n to ship:name:length.
   }
   return ship:name:substring(0, n).
 }

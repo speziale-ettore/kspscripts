@@ -4,6 +4,7 @@
 
 include("utils/mission-runner.ks").
 include("utils/mfd.ks").
+include("utils/ship.ks").
 include("utils/watchdog.ks").
 
 //
@@ -12,6 +13,12 @@ include("utils/watchdog.ks").
 
 function _launch {
   parameter mission.
+
+  // Science MFD.
+
+  local science is make_first_science_mfd_page(ship_science()).
+
+  // Planets MFD.
 
   local hello_venus is make_first_mfd_page(_make_hello("Venus")).
   local hello_earth is make_mfd_page(_make_hello("Earth")).
@@ -31,7 +38,7 @@ function _launch {
   set_next_mfd_page(hello_uranus, hello_neptune).
   set_next_mfd_page(hello_neptune, hello_jupiter).
 
-  local rocky_planets is make_first_mfd_page(_rocky_planets@).
+  local rocky_planets is make_mfd_page(_rocky_planets@).
 
   set_sub_mfd_page(rocky_planets, 4, hello_venus).
   set_sub_mfd_page(rocky_planets, 5, hello_earth).
@@ -44,10 +51,13 @@ function _launch {
   set_sub_mfd_page(gas_planets, 6, hello_uranus).
   set_sub_mfd_page(gas_planets, 7, hello_neptune).
 
-  set_next_mfd_page(rocky_planets, gas_planets).
-  set_next_mfd_page(gas_planets, rocky_planets).
+  // MFD initialization.
 
-  mfd_init(rocky_planets).
+  set_next_mfd_page(science, rocky_planets).
+  set_next_mfd_page(rocky_planets, gas_planets).
+  set_next_mfd_page(gas_planets, science).
+
+  mfd_init(science).
 
   switch_to_runmode(mission, "loop").
 }

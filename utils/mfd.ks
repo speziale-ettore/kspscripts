@@ -3,6 +3,7 @@
 //
 
 include("math/modulo.ks").
+include("utils/science.ks").
 
 //
 // mfd pages implementation.
@@ -182,4 +183,32 @@ function mfd_update {
   print " ".
 
   cur_page["render"]().
+}
+
+//
+// Science mfd.
+//
+
+function make_science_mfd_page {
+  parameter science is list().
+  parameter first is false.
+
+  function _render {
+    print "Experiments:".
+
+    for experiment in science {
+      print "  *. " + experiment:part:title + " -> "
+                    + science_data(experiment) + " Mits, "
+                    + science_transmit(experiment) + "/"
+                    + science_recovery(experiment) + " Science".
+    }
+  }
+
+  return make_mfd_page(_render@, first).
+}
+
+function make_first_science_mfd_page {
+  parameter science is list().
+
+  return make_science_mfd_page(science, true).
 }
