@@ -67,25 +67,34 @@ function _loop {
 }
 
 function _rocky_planets {
-  print "Rocky Planets:".
-  print "  4. Venus".
-  print "  5. Earth".
-  print "  6. Mars".
+  parameter update.
+  if not update {
+    print "Rocky Planets:".
+    print "  4. Venus".
+    print "  5. Earth".
+    print "  6. Mars".
+  }
 }
 
 function _gas_planets {
-  print "Gas Planets:".
-  print "  4. Jupiter".
-  print "  5. Saturn".
-  print "  6. Uranus".
-  print "  7. Neptune".
+  parameter update.
+  if not update {
+    print "Gas Planets:".
+    print "  4. Jupiter".
+    print "  5. Saturn".
+    print "  6. Uranus".
+    print "  7. Neptune".
+  }
 }
 
 function _make_hello {
   parameter planet.
 
   function _hello {
-    print "Hello, " + planet + "!".
+    parameter update.
+    if not update {
+      print "Hello, " + planet + "!".
+    }
   }
 
   return _hello@.
