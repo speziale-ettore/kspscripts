@@ -2,6 +2,7 @@
 // boot.ks: vessel bootloader.
 //
 
+set config:ipu to 2000.
 wait until ship:unpacked.
 
 function download {

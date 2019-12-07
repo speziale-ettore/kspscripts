@@ -199,7 +199,13 @@ function mfd_update {
     clearscreen.
     print "Page ".
   }
-  print (cur_page_no + 1) + "/" + cur_num_pages at(6, 0).
+
+  local msg is (cur_page_no + 1) + "/" + cur_num_pages.
+  until 6 + msg:length = terminal:width {
+    set msg to msg + " ".
+  }
+  print msg at(6, 0).
+
   if mode = draw_all {
     print " ".
   }
@@ -229,14 +235,17 @@ function make_science_mfd_page {
       }
     }
 
-    local col_no is 0.
     local row_no is 3.
 
     for experiment in science {
-      set col_no to 5 + experiment:part:title:length + 4.
-      print science_data(experiment) + " Mits, " +
-            science_transmit(experiment) + "/" +
-            science_recovery(experiment) + " Science" at (col_no, row_no).
+      local col_no is 5 + experiment:part:title:length + 4.
+      local msg is science_data(experiment) + " Mits, " +
+                   science_transmit(experiment) + "/" +
+                   science_recovery(experiment) + " Science".
+      until col_no + msg:length = terminal:width {
+        set msg to msg + " ".
+      }
+      print msg at (col_no, row_no).
       set row_no to row_no + 1.
     }
   }
