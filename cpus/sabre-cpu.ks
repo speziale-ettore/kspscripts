@@ -12,8 +12,6 @@ include("plane/flap.ks").
 function _launch {
   parameter mission.
 
-  sas on.
-
   switch_to_runmode(mission, "loop").
 }
 
