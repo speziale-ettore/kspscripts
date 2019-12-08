@@ -4,6 +4,7 @@
 
 include("utils/mission-runner.ks").
 include("utils/mfd.ks").
+include("utils/science.ks").
 include("utils/ship.ks").
 include("utils/watchdog.ks").
 
@@ -110,6 +111,7 @@ sequence:add("loop", _loop@).
 
 local events is lexicon().
 events:add("mfd", mfd_update@).
+events:add("science", make_science()).
 events:add("watchdog", soft_reset@).
 
 run_mission(sequence, events).
