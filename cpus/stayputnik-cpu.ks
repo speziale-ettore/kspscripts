@@ -1,5 +1,5 @@
 //
-// stayputnik-cpu: staypytnik capsule,
+// stayputnik-cpu: staypytnik capsule.
 //
 
 include("utils/mission-runner.ks").

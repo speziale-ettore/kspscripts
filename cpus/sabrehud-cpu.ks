@@ -3,12 +3,11 @@
 //
 
 include("utils/mission-runner.ks").
+include("utils/mfd.ks").
 
 //
 // Mission sequence.
 //
-
-include("utils/mfd.ks").
 
 function _launch {
   parameter mission.
