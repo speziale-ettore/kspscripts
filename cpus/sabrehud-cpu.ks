@@ -12,9 +12,13 @@ include("utils/mfd.ks").
 function _launch {
   parameter mission.
 
-  local science is make_first_science_mfd_page(ship_science()).
+  local navigation is make_first_navigation_mfd_page(allwaypoints()).
+  local science is make_science_mfd_page(ship_science()).
 
-  mfd_init(science).
+  set_next_mfd_page(navigation, science).
+  set_next_mfd_page(science, navigation).
+
+  mfd_init(navigation).
 
   switch_to_runmode(mission, "loop").
 }

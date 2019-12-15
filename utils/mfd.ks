@@ -200,11 +200,7 @@ function mfd_update {
     print "Page ".
   }
 
-  local msg is (cur_page_no + 1) + "/" + cur_num_pages.
-  until 6 + msg:length = terminal:width {
-    set msg to msg + " ".
-  }
-  print msg at(6, 0).
+  print_line((cur_page_no + 1) + "/" + cur_num_pages, 6, 0).
 
   if mode = draw_all {
     print " ".
@@ -215,6 +211,102 @@ function mfd_update {
   if mode = draw_all {
     set draw_mode to draw_update.
   }
+}
+
+function print_line {
+  parameter msg.
+  parameter col is 0.
+  parameter row is 0.
+  parameter err_msg is "".
+
+  if col + msg:length > terminal:width {
+    set msg to err_msg.
+  }
+  until col + msg:length = terminal:width {
+    set msg to msg + " ".
+  }
+  print msg at (col, row).
+}
+
+//
+// Navigation mfd.
+//
+
+function make_navigation_mfd_page {
+  parameter waypoints is list().
+  parameter first is false.
+
+  local cur_waypoint_no is 0.
+
+  local hud_vectors is list().
+  for waypoint in waypoints {
+    local cur_waypoint is waypoint.
+    hud_vectors:add(vecdraw(v(0, 0, 0), { return cur_waypoint:position. },
+                    rgb(1, 1, 0))).
+  }
+
+  function _render {
+    parameter update.
+
+    if not update {
+      print "Waypoint Name: ".
+      print "Waypoint Distance: ".
+      print " ".
+      print "Actions:".
+      print "  4. Prev Waypoint".
+      print "  5. Next Waypoint".
+      print "  6. Toggle HUD".
+      print "  7. Toggle Reference".
+    }
+
+    print_line(waypoints[cur_waypoint_no]:name, 15, 2).
+    print_line(round(waypoints[cur_waypoint_no]:position:mag / 1000, 1) + " Km",
+                     19, 3, "inf Km").
+  }
+
+  local page is make_mfd_page(_render@, first).
+
+  function _prev_waypoint {
+    local show is hud_vectors[cur_waypoint_no]:show.
+    set hud_vectors[cur_waypoint_no]:show to false.
+    set cur_waypoint_no to modulo(cur_waypoint_no - 1, waypoints:length).
+    set hud_vectors[cur_waypoint_no]:show to show.
+  }
+
+  function _next_waypoint {
+    local show is hud_vectors[cur_waypoint_no]:show.
+    set hud_vectors[cur_waypoint_no]:show to false.
+    set cur_waypoint_no to modulo(cur_waypoint_no + 1, waypoints:length).
+    set hud_vectors[cur_waypoint_no]:show to show.
+  }
+
+  function _toggle_hud {
+    set hud_vectors[cur_waypoint_no]:show to
+        not hud_vectors[cur_waypoint_no]:show.
+  }
+
+  local ax is vecdraw(v(0, 0, 0), v(10, 0, 0), rgb(1, 0, 0), "x").
+  local ay is vecdraw(v(0, 0, 0), v(0, 10, 0), rgb(0, 1, 0), "y").
+  local az is vecdraw(v(0, 0, 0), v(0, 0, 10), rgb(0, 0, 1), "z").
+
+  function _toggle_reference {
+    set ax:show to not ax:show.
+    set ay:show to not ay:show.
+    set az:show to not az:show.
+  }
+
+  set_mfd_action(page, 4, _prev_waypoint@).
+  set_mfd_action(page, 5, _next_waypoint@).
+  set_mfd_action(page, 6, _toggle_hud@).
+  set_mfd_action(page, 7, _toggle_reference@).
+
+  return page.
+}
+
+function make_first_navigation_mfd_page {
+  parameter waypoints is list().
+
+  return make_navigation_mfd_page(waypoints, true).
 }
 
 //
@@ -253,13 +345,9 @@ function make_science_mfd_page {
 
     for experiment in science {
       local col_no is 5 + experiment:part:title:length + 4.
-      local msg is science_data(experiment) + " Mits, " +
-                   science_transmit(experiment) + "/" +
-                   science_recovery(experiment) + " Science".
-      until col_no + msg:length = terminal:width {
-        set msg to msg + " ".
-      }
-      print msg at (col_no, row_no).
+      print_line(science_data(experiment) + " Mits, " +
+                 science_transmit(experiment) + "/" +
+                 science_recovery(experiment) + " Science", col_no, row_no).
       set row_no to row_no + 1.
     }
   }
