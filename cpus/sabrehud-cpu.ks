@@ -4,6 +4,7 @@
 
 include("utils/mission-runner.ks").
 include("utils/mfd.ks").
+include("utils/navigation.ks").
 
 //
 // Mission sequence.
@@ -12,7 +13,7 @@ include("utils/mfd.ks").
 function _launch {
   parameter mission.
 
-  local navigation is make_first_navigation_mfd_page(allwaypoints()).
+  local navigation is make_first_navigation_mfd_page(all_waypoints()).
   local science is make_science_mfd_page(ship_science()).
 
   set_next_mfd_page(navigation, science).

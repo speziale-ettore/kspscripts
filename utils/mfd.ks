@@ -232,17 +232,78 @@ function print_line {
 // Navigation mfd.
 //
 
+function make_hud_airstrip {
+  parameter waypoint.
+
+  local start is waypoint(waypoint:name + " Start").
+  local end is waypoint(waypoint:name + " End").
+
+  function _start {
+    return start:position.
+  }
+  function _end {
+    return end:position.
+  }
+  function _y {
+    return vcrs(end:position - start:position,
+                body:position - start:position):normalized.
+  }
+  function _z {
+    return (start:position - body:position):normalized.
+  }
+
+  local hud is list().
+
+  for d in list(-10, 10) {
+    local cur_d is d.
+    local vec is vecdraw({ return _start() + cur_d * _y(). },
+                         { return _end() - _start() + cur_d * _y(). },
+                         rgb(1, 0, 0), "", 1.0, false, 1.5, false).
+    hud:add(vec).
+  }
+
+  return hud.
+}
+
+function make_hud_target {
+  parameter waypoint.
+  local vec is vecdraw(v(0, 0, 0), { return waypoint:position. }, rgb(1, 1, 0)).
+  return list(vec).
+}
+
+function hud_show {
+  parameter hud.
+  parameter new_show.
+
+  local old_show is hud[0]:show.
+  for vec in hud {
+    set vec:show to new_show.
+  }
+
+  return old_show.
+}
+
+function hud_flip {
+  parameter hud.
+
+  for vec in hud {
+    set vec:show to not vec:show.
+  }
+}
+
 function make_navigation_mfd_page {
   parameter waypoints is list().
   parameter first is false.
 
   local cur_waypoint_no is 0.
+  local huds is list().
 
-  local hud_vectors is list().
   for waypoint in waypoints {
-    local cur_waypoint is waypoint.
-    hud_vectors:add(vecdraw(v(0, 0, 0), { return cur_waypoint:position. },
-                    rgb(1, 1, 0))).
+    if waypoint:name = "KSC" {
+      huds:add(make_hud_airstrip(waypoint)).
+    } else {
+      huds:add(make_hud_target(waypoint)).
+    }
   }
 
   function _render {
@@ -267,22 +328,19 @@ function make_navigation_mfd_page {
   local page is make_mfd_page(_render@, first).
 
   function _prev_waypoint {
-    local show is hud_vectors[cur_waypoint_no]:show.
-    set hud_vectors[cur_waypoint_no]:show to false.
+    local show is hud_show(huds[cur_waypoint_no], false).
     set cur_waypoint_no to modulo(cur_waypoint_no - 1, waypoints:length).
-    set hud_vectors[cur_waypoint_no]:show to show.
+    hud_show(huds[cur_waypoint_no], show).
   }
 
   function _next_waypoint {
-    local show is hud_vectors[cur_waypoint_no]:show.
-    set hud_vectors[cur_waypoint_no]:show to false.
+    local show is hud_show(huds[cur_waypoint_no], false).
     set cur_waypoint_no to modulo(cur_waypoint_no + 1, waypoints:length).
-    set hud_vectors[cur_waypoint_no]:show to show.
+    hud_show(huds[cur_waypoint_no], show).
   }
 
   function _toggle_hud {
-    set hud_vectors[cur_waypoint_no]:show to
-        not hud_vectors[cur_waypoint_no]:show.
+    hud_flip(huds[cur_waypoint_no]).
   }
 
   local ax is vecdraw(v(0, 0, 0), 10 * ship:facing:forevector:normalized,

@@ -16,3 +16,15 @@ function dir_heading {
 
   return heading.
 }
+
+function all_waypoints {
+  local waypoints is list().
+
+  for waypoint in allwaypoints() {
+    if waypoint:name <> "KSC Start" and waypoint:name <> "KSC End" {
+      waypoints:add(waypoint).
+    }
+  }
+
+  return waypoints.
+}
