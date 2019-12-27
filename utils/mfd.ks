@@ -285,9 +285,12 @@ function make_navigation_mfd_page {
         not hud_vectors[cur_waypoint_no]:show.
   }
 
-  local ax is vecdraw(v(0, 0, 0), v(10, 0, 0), rgb(1, 0, 0), "x").
-  local ay is vecdraw(v(0, 0, 0), v(0, 10, 0), rgb(0, 1, 0), "y").
-  local az is vecdraw(v(0, 0, 0), v(0, 0, 10), rgb(0, 0, 1), "z").
+  local ax is vecdraw(v(0, 0, 0), 10 * ship:facing:forevector:normalized,
+                      rgb(1, 0, 0), "x").
+  local ay is vecdraw(v(0, 0, 0), 10 * ship:facing:topvector:normalized,
+                      rgb(0, 1, 0), "y").
+  local az is vecdraw(v(0, 0, 0), 10 * ship:facing:starvector:normalized,
+                     rgb(0, 0, 1), "z").
 
   function _toggle_reference {
     set ax:show to not ax:show.
