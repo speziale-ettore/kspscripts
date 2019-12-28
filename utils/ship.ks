@@ -27,6 +27,16 @@ function ship_haspart {
   return not ship:partstagged(tag):empty.
 }
 
+function ship_engines {
+  local engines is list().
+
+  for part in ship:partstagged(ship_family() + "-engine") {
+    engines:add(part).
+  }
+
+  return engines.
+}
+
 function ship_science {
   local science is list().
 

@@ -13,13 +13,15 @@ include("utils/navigation.ks").
 function _launch {
   parameter mission.
 
-  local navigation is make_first_navigation_mfd_page(all_waypoints()).
+  local engineering is make_first_engineering_mfd_page(ship_engines()).
+  local navigation is make_navigation_mfd_page(all_waypoints()).
   local science is make_science_mfd_page(ship_science()).
 
+  set_next_mfd_page(engineering, navigation).
   set_next_mfd_page(navigation, science).
-  set_next_mfd_page(science, navigation).
+  set_next_mfd_page(science, engineering).
 
-  mfd_init(navigation).
+  mfd_init(engineering).
 
   switch_to_runmode(mission, "loop").
 }

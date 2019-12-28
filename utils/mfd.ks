@@ -229,6 +229,61 @@ function print_line {
 }
 
 //
+// Engineering mfd.
+//
+
+function make_engineering_mfd_page {
+  parameter engines is list().
+  parameter first is false.
+
+  function _render {
+    parameter update.
+
+    if not update {
+      for engine in engines {
+        print "Engine: " + engine:title.
+        print "  Fuel Flow: ".
+        print "  Thrust: ".
+      }
+      print " ".
+      print "Actions:".
+      print "  4. Toggle Engines".
+    }
+
+    local row_no is 3.
+
+    for engine in engines {
+      print_line(round(engine:fuelflow, 6) + " Kg/s", 13, row_no).
+      set row_no to row_no + 1.
+      print_line(round(engine:thrust, 1) + " kN", 10, row_no).
+      set row_no to row_no + 2.
+    }
+  }
+
+  local page is make_mfd_page(_render@, first).
+
+  function _toggle_engines {
+    for engine in engines {
+      if not engine:ignition {
+        engine:activate().
+      } else {
+        engine:shutdown().
+      }
+    }
+  }
+
+  set_mfd_action(page, 4, _toggle_engines@).
+
+  return page.
+}
+
+function make_first_engineering_mfd_page {
+  parameter engines is list().
+
+  return make_engineering_mfd_page(engines, true).
+}
+
+//
 // Navigation mfd.
 //
 
