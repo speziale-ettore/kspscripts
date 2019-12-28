@@ -37,6 +37,16 @@ function ship_engines {
   return engines.
 }
 
+function ship_flaps {
+  local flaps is list().
+
+  for flap in ship:partstagged(ship_family() + "-flap") {
+    flaps:add(flap:getmodule("ModuleControlSurface")).
+  }
+
+  return flaps.
+}
+
 function ship_science {
   local science is list().
 

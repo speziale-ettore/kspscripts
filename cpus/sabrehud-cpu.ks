@@ -13,7 +13,8 @@ include("utils/navigation.ks").
 function _launch {
   parameter mission.
 
-  local engineering is make_first_engineering_mfd_page(ship_engines()).
+  local engineering is make_first_engineering_mfd_page(ship_engines(),
+                                                       ship_flaps()).
   local navigation is make_navigation_mfd_page(all_waypoints()).
   local science is make_science_mfd_page(ship_science()).
 
