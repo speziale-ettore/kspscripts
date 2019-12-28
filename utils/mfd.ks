@@ -406,9 +406,10 @@ function make_science_mfd_page {
 
     for experiment in science {
       local col_no is 5 + experiment:part:title:length + 4.
-      print_line(science_data(experiment) + " Mits, " +
-                 science_transmit(experiment) + "/" +
-                 science_recovery(experiment) + " Science", col_no, row_no).
+      print_line(round(science_data(experiment), 1) + " Mits, " +
+                 round(science_transmit(experiment), 1) + "/" +
+                 round(science_recovery(experiment), 1) + " Science",
+                 col_no, row_no).
       set row_no to row_no + 1.
     }
   }
