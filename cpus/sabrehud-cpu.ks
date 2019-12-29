@@ -4,6 +4,10 @@
 
 include("utils/mission-runner.ks").
 include("utils/mfd.ks").
+include("utils/engineering-mfd.ks").
+include("utils/autopilot-mfd.ks").
+include("utils/navigation-mfd.ks").
+include("utils/science-mfd.ks").
 include("utils/navigation.ks").
 
 //

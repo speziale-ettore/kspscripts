@@ -5,6 +5,7 @@
 include("utils/mission-runner.ks").
 include("utils/capsule.ks").
 include("utils/mfd.ks").
+include("utils/science-mfd.ks").
 include("utils/ship.ks").
 
 local do_detach is false.

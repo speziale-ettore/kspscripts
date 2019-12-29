@@ -5,6 +5,7 @@
 include("utils/mission-runner.ks").
 include("utils/mfd.ks").
 include("utils/science.ks").
+include("utils/science-mfd.ks").
 include("utils/ship.ks").
 include("utils/watchdog.ks").
 
