@@ -2,18 +2,26 @@
 // watchdog.ks: watchdog utils.
 //
 
-local do_reset is false.
+include("utils/ship.ks").
 
-on ag10 {
-  set do_reset to true.
-  preserve.
-}
+function make_watchdog_replier {
+  function _replier {
+    parameter mission.
 
-function soft_reset {
-  parameter mission.
+    if core:messages:empty {
+      return.
+    }
 
-  if do_reset {
-    terminate(mission).
-    reboot.
+    local msg is core:messages:peek().
+
+    if msg:content:startswith("ping-") {
+      local cpu is msg:content:substring(5, msg:content:length - 5).
+      if ship_haspart(cpu) {
+        processor(cpu):connection:sendmessage("pong-" + core:tag).
+      }
+      core:messages:pop().
+    }
   }
+
+  return _replier@.
 }

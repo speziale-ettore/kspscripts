@@ -113,6 +113,6 @@ sequence:add("loop", _loop@).
 local events is lexicon().
 events:add("mfd", mfd_update@).
 events:add("science", make_science()).
-events:add("watchdog", soft_reset@).
+events:add("watchdog", make_watchdog_replier()).
 
 run_mission(sequence, events).

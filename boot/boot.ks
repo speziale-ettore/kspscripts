@@ -7,7 +7,7 @@ wait until ship:unpacked.
 
 function download {
   parameter f.
-  parameter g is core:volume + ":/" + f.
+  parameter v is core:tag.
 
   if not ship:status = "prelaunch" and not ship:connection:isconnected {
     return false.
@@ -16,7 +16,9 @@ function download {
   local downloaded is false.
 
   if exists("0:/" + f) {
-    copypath("0:/" + f, g).
+    switch to v.
+    copypath("0:/" + f, f).
+    switch to core:tag.
     set downloaded to true.
   }
 
@@ -29,7 +31,7 @@ function include {
   if not download(f) {
     notify_err("can't include '" + f + "'").
   }
-  runoncepath(core:volume + ":/" + f).
+  runoncepath(f).
 }
 
 function notify_info {
@@ -45,8 +47,8 @@ function notify_err {
 set ship:control:pilotmainthrottle to 0.
 brakes on.
 
-if not download("cpus/" + core:tag + ".ks", core:volume + ":/startup.ks") {
+if not download("cpus/" + core:tag + ".ks") {
   notify_err("missing '" + core:tag + "' startup file").
 } else {
-  runpath(core:volume + ":/startup.ks").
+  runpath("cpus/" + core:tag + ".ks").
 }
