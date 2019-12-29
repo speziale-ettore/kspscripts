@@ -9,6 +9,7 @@ include("utils/autopilot-mfd.ks").
 include("utils/navigation-mfd.ks").
 include("utils/science-mfd.ks").
 include("utils/navigation.ks").
+include("utils/watchdog.ks").
 
 //
 // Mission sequence.
@@ -48,5 +49,6 @@ sequence:add("loop", _loop@).
 local events is lexicon().
 events:add("mfd", mfd_update@).
 events:add("science", make_science()).
+events:add("watchdog", make_watchdog_replier()).
 
 run_mission(sequence, events).

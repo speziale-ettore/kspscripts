@@ -4,6 +4,7 @@
 
 include("utils/mission-runner.ks").
 include("plane/flap.ks").
+include("utils/watchdog.ks").
 
 //
 // Mission sequence.
@@ -29,5 +30,6 @@ sequence:add("loop", _loop@).
 
 local events is lexicon().
 events:add("flap", make_flap_controller(110, 120, 10)).
+events:add("watchdog", make_watchdog_replier()).
 
 run_mission(sequence, events).

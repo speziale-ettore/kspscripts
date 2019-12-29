@@ -41,8 +41,8 @@ function _launch {
 
   wait 2.
 
-  if not core:messages:empty {
-    for cpu in all_cpus {
+  for cpu in all_cpus {
+    if not core:messages:empty {
       local msg is core:messages:pop().
       if msg:content:startswith("pong-") {
         set pings[msg:content:substring(5, msg:content:length - 5)] to true.
