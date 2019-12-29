@@ -15,10 +15,12 @@ function _launch {
 
   local engineering is make_first_engineering_mfd_page(ship_engines(),
                                                        ship_flaps()).
+  local autopilot is make_autopilot_mfd_page().
   local navigation is make_navigation_mfd_page(all_waypoints()).
   local science is make_science_mfd_page(ship_science()).
 
-  set_next_mfd_page(engineering, navigation).
+  set_next_mfd_page(engineering, autopilot).
+  set_next_mfd_page(autopilot, navigation).
   set_next_mfd_page(navigation, science).
   set_next_mfd_page(science, engineering).
 
