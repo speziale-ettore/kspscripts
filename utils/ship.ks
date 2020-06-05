@@ -14,6 +14,18 @@ function ship_roll {
   return -90 + vang(ship:up:forevector, ship:facing:starvector).
 }
 
+function ship_x {
+  return ship:facing:forevector:normalized.
+}
+
+function ship_y {
+  return ship:facing:upvector:normalized.
+}
+
+function ship_z {
+  return ship:facing:starvector:normalized.
+}
+
 function ship_family {
   local n is ship:name:indexof(" ").
   if n = -1 {
@@ -25,6 +37,29 @@ function ship_family {
 function ship_haspart {
   parameter tag.
   return not ship:partstagged(tag):empty.
+}
+
+function ship_cpu {
+  parameter name.
+
+  local cpu is false.
+  if ship_haspart(ship_family() + "-" + name + "-cpu") {
+    set cpu to processor(ship_family() + "-" + name + "-cpu").
+  } else if ship_haspart(name + "-cpu") {
+    set cpu to processor(name + "-cpu").
+  } else {
+    set cpu to processor(ship_family() + "-cpu").
+  }
+
+  return cpu.
+}
+
+function ship_mfd_cpu {
+  return ship_cpu("mfd").
+}
+
+function ship_hud_cpu {
+  return ship_cpu("hud").
 }
 
 function ship_engines {

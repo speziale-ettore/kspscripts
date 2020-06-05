@@ -10,11 +10,11 @@ function make_science_mfd_page {
 
   local science_cpu is false.
   if ship_haspart(ship_family() + "-science-cpu") {
-    set scince_cpu to processor(ship_family() + "-science-cpu").
+    set science_cpu to processor(ship_family() + "-science-cpu").
   } else if ship_haspart("science-cpu") {
     set science_cpu to processor("science-cpu").
   } else {
-    set science_cpu to core.
+    set science_cpu to processor(ship_family() + "-cpu").
   }
 
   function _render {

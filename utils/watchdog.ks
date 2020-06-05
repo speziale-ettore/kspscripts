@@ -13,6 +13,9 @@ function make_watchdog_replier {
     }
 
     local msg is core:messages:peek().
+    if not msg:content:istype("string") {
+      return.
+    }
 
     if msg:content:startswith("ping-") {
       local cpu is msg:content:substring(5, msg:content:length - 5).

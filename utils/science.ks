@@ -90,6 +90,9 @@ function make_science {
     }
 
     local msg is core:messages:peek().
+    if not msg:content:istype("string") {
+      return.
+    }
 
     if msg:content = "run_all_experiments" {
       run_all_experiments(science).

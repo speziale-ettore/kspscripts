@@ -44,6 +44,7 @@ function notify_err {
   hudtext("error: " + msg, 5, 2, 15, red, true).
 }
 
+core:messages:clear().
 set ship:control:pilotmainthrottle to 0.
 brakes on.
 
