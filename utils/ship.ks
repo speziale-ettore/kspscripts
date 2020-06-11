@@ -26,6 +26,16 @@ function ship_z {
   return ship:facing:starvector:normalized.
 }
 
+function ship_aoa {
+  local aoa is -360.
+
+  for wing in ship_wings() {
+    set aoa to max(aoa, vang(ship:velocity:surface, wing:facing:forevector)).
+  }
+
+  return aoa.
+}
+
 function ship_family {
   local n is ship:name:indexof(" ").
   if n = -1 {
@@ -70,6 +80,16 @@ function ship_engines {
   }
 
   return engines.
+}
+
+function ship_wings {
+  local wings is list().
+
+  for wing in ship:partstagged(ship_family() + "-wing") {
+    wings:add(wing).
+  }
+
+  return wings.
 }
 
 function ship_flaps {

@@ -28,6 +28,11 @@ function make_engineering_mfd_page {
         }
         print " ".
       }
+      print "Ship Pitch: ".
+      print "Ship Yaw: ".
+      print "Ship Roll: ".
+      print "Angle of Attack: ".
+      print " ".
       print "Actions:".
       print "  4. Toggle Engines".
       if not flaps:empty {
@@ -52,6 +57,14 @@ function make_engineering_mfd_page {
         set row_no to row_no + 2.
       }
     }
+    print_line(round(ship_pitch(), 1) + " deg", 12, row_no).
+    set row_no to row_no + 1.
+    print_line(round(ship_yaw(), 1) + " deg", 10, row_no).
+    set row_no to row_no + 1.
+    print_line(round(ship_roll(), 1) + " deg", 11, row_no).
+    set row_no to row_no + 1.
+    print_line(round(ship_aoa(), 1) + " deg", 17, row_no).
+    set row_not to row_no + 1.
   }
 
   local page is make_mfd_page(_render@, first).
