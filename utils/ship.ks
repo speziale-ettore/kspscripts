@@ -30,7 +30,9 @@ function ship_aoa {
   local aoa is -360.
 
   for wing in ship_wings() {
-    set aoa to max(aoa, vang(ship:velocity:surface, wing:facing:forevector)).
+   local aoaw is arctan2(vdot(wing:facing:topvector, ship:velocity:surface),
+                         vdot(wing:facing:forevector, ship:velocity:surface)).
+   set aoa to max(aoa, aoaw).
   }
 
   return aoa.
