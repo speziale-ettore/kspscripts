@@ -92,9 +92,11 @@ function make_engineering_mfd_page {
   }
 
   set_mfd_action(page, 4, _toggle_engines@).
-  set_mfd_action(page, 5, _toggle_auto_flaps@).
-  set_mfd_action(page, 6, _less_flaps@).
-  set_mfd_action(page, 7, _more_flaps@).
+  if not flaps:empty {
+    set_mfd_action(page, 5, _toggle_auto_flaps@).
+    set_mfd_action(page, 6, _less_flaps@).
+    set_mfd_action(page, 7, _more_flaps@).
+  }
 
   return page.
 }
