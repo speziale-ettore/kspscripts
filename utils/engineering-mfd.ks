@@ -11,6 +11,13 @@ function make_engineering_mfd_page {
 
   local main_cpu is processor(ship_family() + "-cpu").
 
+  local black_cpu is false.
+  if ship_haspart(ship_family() + "-black-cpu") {
+    set black_cpu to processor(ship_family() + "-black-cpu").
+  } else {
+    set black_cpu to processor(ship_family() + "-cpu").
+  }
+
   function _render {
     parameter update.
 
@@ -28,6 +35,7 @@ function make_engineering_mfd_page {
         }
         print " ".
       }
+      print " ".
       print "Ship Pitch: ".
       print "Ship Yaw: ".
       print "Ship Roll: ".
@@ -40,6 +48,7 @@ function make_engineering_mfd_page {
         print "  6. Less Flaps".
         print "  7. More Flaps".
       }
+      print "  8. Toggle Logging".
     }
 
     local row_no is 3.
@@ -57,6 +66,7 @@ function make_engineering_mfd_page {
         set row_no to row_no + 2.
       }
     }
+    set row_no to row_no + 1.
     print_line(round(ship_pitch(), 1) + " deg", 12, row_no).
     set row_no to row_no + 1.
     print_line(round(ship_yaw(), 1) + " deg", 10, row_no).
@@ -64,7 +74,7 @@ function make_engineering_mfd_page {
     print_line(round(ship_roll(), 1) + " deg", 11, row_no).
     set row_no to row_no + 1.
     print_line(round(ship_aoa(), 1) + " deg", 17, row_no).
-    set row_not to row_no + 1.
+    set row_no to row_no + 1.
   }
 
   local page is make_mfd_page(_render@, first).
@@ -91,11 +101,16 @@ function make_engineering_mfd_page {
     main_cpu:connection:sendmessage("more_flaps").
   }
 
+  function _toggle_logging {
+    black_cpu:connection:sendmessage("toggle_logging").
+  }
+
   set_mfd_action(page, 4, _toggle_engines@).
   if not flaps:empty {
     set_mfd_action(page, 5, _toggle_auto_flaps@).
     set_mfd_action(page, 6, _less_flaps@).
     set_mfd_action(page, 7, _more_flaps@).
+    set_mfd_action(page, 8, _toggle_logging@).
   }
 
   return page.

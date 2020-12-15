@@ -3,6 +3,10 @@
 //
 
 function ship_yaw {
+  if ship:velocity:surface:mag < 0.01 {
+    return 0.
+  }
+
   return 90 - vang(ship:velocity:surface, ship:facing:starvector).
 }
 
@@ -27,6 +31,10 @@ function ship_z {
 }
 
 function ship_aoa {
+  if ship:velocity:surface:mag < 0.01 {
+    return 360.
+  }
+
   local aoa is -360.
 
   for wing in ship_wings() {

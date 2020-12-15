@@ -2,6 +2,7 @@
 // flap.ks: automatic flap controller.
 //
 
+include("control/rate_limiter.ks").
 include("math/clamp.ks").
 include("utils/ship.ks").
 
@@ -17,20 +18,29 @@ function flap_set_angle {
 }
 
 function make_flap_controller {
-  parameter ext_speed.
-  parameter ret_speed.
+  parameter min_aoa.
+  parameter max_aoa.
+  parameter min_speed.
   parameter max_angle.
 
   local flaps is ship_flaps().
   local auto_flaps is true.
 
-  local m is -max_angle / (ret_speed - ext_speed).
-  local q is -m * ret_speed.
+  local m is max_angle / (max_aoa - min_aoa).
+  local q is -m * min_aoa.
+
+  local rate_limiters is list().
+  for flap in flaps {
+    rate_limiters:add(make_rate_limiter(2 * max_angle,
+                                        time:seconds, flap_get_angle(flap))).
+  }
 
   function _flap {
     parameter mission.
 
-    local auto_angle is clamp(m * ship:velocity:surface:mag + q, 0, max_angle).
+    local auto_angle is clamp(m * ship_aoa() + q, 0, max_angle).
+    if (ship:velocity:surface:mag < min_speed)
+      set auto_angle to max_angle.
     local delta_angle is 0.
 
     if not core:messages:empty {
@@ -48,13 +58,15 @@ function make_flap_controller {
       }
     }
 
-    for flap in flaps {
+    from {local i is 0.} until i = flaps:length step {set i to i + 1.} do {
+      local angle is 0.
       if auto_flaps {
-        flap_set_angle(flap, auto_angle).
+        set angle to auto_angle.
       } else {
-        flap_set_angle(flap,
-                       clamp(flap_get_angle(flap) + delta_angle, 0, max_angle)).
+        set angle to clamp(flap_get_angle(flap) + delta_angle, 0, max_angle).
       }
+      set angle to rate_limiter_update(rate_limiters[i], time:seconds, angle).
+      flap_set_angle(flaps[i], angle).
     }
   }
 
