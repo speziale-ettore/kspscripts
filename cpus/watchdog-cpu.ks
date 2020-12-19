@@ -13,35 +13,30 @@ function _launch {
   parameter mission.
 
   local i is 0.
-  local j is -1.
   list processors in all_cpus.
+  local watch_cpus is list().
 
   until i = all_cpus:length {
-    if all_cpus[i]:tag = core:tag {
-      set j to i.
+    if all_cpus[i]:tag <> core:tag and all_cpus[i]:tag <> "terminal-cpu" {
+      watch_cpus:add(all_cpus[i]).
     }
     set i to i + 1.
   }
-  if j = -1 {
-    wait 2.
-    return.
-  }
-  all_cpus:remove(j).
 
   local pings is lexicon().
-  for cpu in all_cpus {
+  for cpu in watch_cpus {
     set pings[cpu:tag] to false.
   }
 
   core:messages:clear().
 
-  for cpu in all_cpus {
+  for cpu in watch_cpus {
     cpu:connection:sendmessage("ping-" + core:tag).
   }
 
   wait 2.
 
-  for cpu in all_cpus {
+  for cpu in watch_cpus {
     if not core:messages:empty {
       local msg is core:messages:pop().
       if msg:content:istype("string") and msg:content:startswith("pong-") {
