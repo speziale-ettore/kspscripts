@@ -112,6 +112,18 @@ function ship_flaps {
   return flaps.
 }
 
+function ship_has_acc_sensor {
+  return not ship:partstitled("Double-C Seismic Accelerometer"):empty.
+}
+
+function ship_has_pres_sensor {
+  return not ship:partstitled("PresMat Barometer"):empty.
+}
+
+function ship_has_temp_sensor {
+  return not ship:partstitled("2HOT Thermometer"):empty.
+}
+
 function ship_science {
   local science is list().
 

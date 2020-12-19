@@ -33,9 +33,26 @@ function make_blackbox {
                      + " " + ship_roll()
                      + " " + ship_yaw().
       set msg to msg + " " + ship_aoa().
-      set msg to msg + " " + ship:velocity:surface:x +
-                     + " " + ship:velocity:surface:y +
+      set msg to msg + " " + ship:velocity:surface:x
+                     + " " + ship:velocity:surface:y
                      + " " + ship:velocity:surface:z.
+      if ship_has_acc_sensor() {
+        set msg to msg + " " + ship:sensors:acc:x
+                       + " " + ship:sensors:acc:y
+                       + " " + ship:sensors:acc:z.
+      } else {
+        set msg to msg + " 0 0 0".
+      }
+      if ship_has_pres_sensor() {
+        set msg to msg + " " + ship:sensors:pres.
+      } else {
+        set msg to msg + " 0".
+      }
+      if ship_has_temp_sensor() {
+        set msg to msg + " " + ship:sensors:temp.
+      } else {
+        set msg to msg + " 0".
+      }
       log msg to log_path.
       set last_time to time.
     }
