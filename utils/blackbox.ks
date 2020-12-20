@@ -53,6 +53,8 @@ function make_blackbox {
       } else {
         set msg to msg + " 0".
       }
+      set msg to msg + " " + ship:altitude
+                     + " " + alt:radar.
       log msg to log_path.
       set last_time to time.
     }

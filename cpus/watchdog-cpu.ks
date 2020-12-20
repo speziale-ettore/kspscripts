@@ -1,5 +1,5 @@
 //
-// watchdog-cpu: watchdog cpu.
+// watchdog-cpu.ks: watchdog cpu.
 //
 
 include("utils/mission-runner.ks").
