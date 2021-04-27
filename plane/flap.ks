@@ -63,7 +63,8 @@ function make_flap_controller {
       if auto_flaps {
         set angle to auto_angle.
       } else {
-        set angle to clamp(flap_get_angle(flap) + delta_angle, 0, max_angle).
+        set angle to clamp(flap_get_angle(flaps[i]) + delta_angle,
+                           0, max_angle).
       }
       set angle to rate_limiter_update(rate_limiters[i], time:seconds, angle).
       flap_set_angle(flaps[i], angle).
