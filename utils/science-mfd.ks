@@ -17,6 +17,13 @@ function make_science_mfd_page {
     set science_cpu to processor(ship_family() + "-cpu").
   }
 
+  local black_cpu is false.
+  if ship_haspart(ship_family() + "-black-cpu") {
+    set black_cpu to processor(ship_family() + "-black-cpu").
+  } else {
+    set black_cpu to processor(ship_family() + "-cpu").
+  }
+
   function _render {
     parameter update.
 
@@ -30,6 +37,7 @@ function make_science_mfd_page {
       print "  4. Run All".
       print "  5. Transmit All".
       print "  6. Reset All".
+      print "  7. Toggle Logging".
     }
 
     local row_no is 3.
@@ -58,9 +66,14 @@ function make_science_mfd_page {
     science_cpu:connection:sendmessage("reset_all_experiments").
   }
 
+  function _toggle_logging {
+    black_cpu:connection:send_message("toggle_logging").
+  }
+
   set_mfd_action(page, 4, _run_all@).
   set_mfd_action(page, 5, _transmit_all@).
   set_mfd_action(page, 6, _reset_all@).
+  set_mfd_action(page, 7, _toggle_logging@).
 
   return page.
 }
