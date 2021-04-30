@@ -7,6 +7,7 @@ include("plane/flap.ks").
 function make_engineering_mfd_page {
   parameter engines is list().
   parameter flaps is list().
+  parameter navigation_lights is list().
   parameter first is false.
 
   local main_cpu is processor(ship_family() + "-cpu").
@@ -34,11 +35,16 @@ function make_engineering_mfd_page {
       print "Angle of Attack: ".
       print " ".
       print "Actions:".
-      print "  4. Toggle Engines".
+      if not engines:empty {
+        print "  4. Toggle Engines".
+      }
       if not flaps:empty {
         print "  5. Toggle Auto Flaps".
         print "  6. Less Flaps".
         print "  7. More Flaps".
+      }
+      if not navigation_lights:empty {
+        print "  8. Toggle Navigation Lights".
       }
     }
 
@@ -91,11 +97,16 @@ function make_engineering_mfd_page {
     main_cpu:connection:sendmessage("more_flaps").
   }
 
+  function _toggle_navigation_lights {
+    main_cpu:connection:sendmessage("toggle_navigation_lights").
+  }
+
   set_mfd_action(page, 4, _toggle_engines@).
   if not flaps:empty {
     set_mfd_action(page, 5, _toggle_auto_flaps@).
     set_mfd_action(page, 6, _less_flaps@).
     set_mfd_action(page, 7, _more_flaps@).
+    set_mfd_action(page, 8, _toggle_navigation_lights@).
   }
 
   return page.
@@ -104,6 +115,7 @@ function make_engineering_mfd_page {
 function make_first_engineering_mfd_page {
   parameter engines is list().
   parameter flaps is list().
+  parameter navigation_lights is list().
 
-  return make_engineering_mfd_page(engines, flaps, true).
+  return make_engineering_mfd_page(engines, flaps, navigation_lights, true).
 }

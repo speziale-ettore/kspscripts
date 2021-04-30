@@ -112,6 +112,16 @@ function ship_flaps {
   return flaps.
 }
 
+function ship_navigation_lights {
+  local navigation_lights is list().
+
+  for navigation_light in ship:partstagged(ship_family() + "-navlight") {
+    navigation_lights:add(navigation_light:getmodule("ModuleLight")).
+  }
+
+  return navigation_lights.
+}
+
 function ship_has_acc_sensor {
   return not ship:partstitled("Double-C Seismic Accelerometer"):empty.
 }

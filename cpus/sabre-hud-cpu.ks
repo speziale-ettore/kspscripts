@@ -21,8 +21,10 @@ function _launch {
 
   local courses is all_air_courses().
 
-  local engineering is make_first_engineering_mfd_page(ship_engines(),
-                                                       ship_flaps()).
+  local engineering is
+    make_first_engineering_mfd_page(ship_engines(),
+                                    ship_flaps(),
+                                    ship_navigation_lights()).
   local autopilot is make_autopilot_mfd_page().
   local navigation is make_navigation_mfd_page(courses).
   local science is make_science_mfd_page(ship_science()).
